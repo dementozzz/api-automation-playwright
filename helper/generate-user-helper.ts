@@ -14,7 +14,6 @@ export async function GenerateBirthdate(){
 
 export async function GenerateEmail(firstname : string, lastname : string){
     let email = firstname + lastname + "@gmail.com"
-
     return email
 }
 
@@ -49,32 +48,4 @@ export async function CreateContact(
         postalCode : postalCode,
         country : faker.location.country()
     }
-}
-
-export async function test(){
-    // fs.readFile('data.ndjson', 'utf8', (err, data) => {
-    //     if (err) {
-    //       console.error('Error reading file:', err);
-    //       return;
-    //     }
-      
-    //     // Split by newlines to separate each JSON object
-    //     const lines = data.split('\n').filter(line => line.trim() !== '');
-      
-    //     // Parse each line as a separate JSON object
-    //     const parsedData = lines.map(line => {
-    //       try {
-    //         return JSON.parse(line);
-    //       } catch (err) {
-    //         console.error('Error parsing line:', line, err);
-    //         return null;
-    //       }
-    //     }).filter(Boolean); // Remove any failed parses
-      
-    //     // Log the results
-    //     console.log(parsedData); // Array of objects
-    //     parsedData.forEach(person => {
-    //       console.log(`${person.firstName} ${person.lastName}`);
-    //     });
-    // });
 }
