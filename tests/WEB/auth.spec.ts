@@ -5,9 +5,10 @@ require('dotenv').config();
 const email = process.env.EMAIL as string
 const password = process.env.PASSWORD as string
 
+
 test('login', async ({page}) => {
 
-    test.step('with invalid credential', async() => {
+    await test.step('with invalid credential', async() => {
         const authpages = new authPages(page);
 
         await authpages.goto();
@@ -20,7 +21,7 @@ test('login', async ({page}) => {
         await expect(errorElement).toContainText("Incorrect username or password");
     })
 
-    test.step('with valid credential', async () => {
+    await test.step('with valid credential', async () => {
         const authpages = new authPages(page);
 
         await authpages.goto();
@@ -29,7 +30,8 @@ test('login', async ({page}) => {
             password : password
         });
 
-        await expect(page).toHaveURL("https://thinking-tester-contact-list.herokuapp.com/contactList")
+        await expect(page).toHaveURL("https://thinking-tester-contact-list.herokuapp.com/contactList");
+        await page.context().storageState({path: "./data/auth/user-cookies.json"});
     })
     
 })

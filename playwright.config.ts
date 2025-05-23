@@ -35,13 +35,23 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup',
-      testMatch: "auth.setup.ts"
+      name: 'web',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/WEB'
     },
     {
-      name: 'api-test',
-      dependencies: ["setup"],
-    },
+      name: 'api',
+      use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/API'
+    }
+    // {
+    //   name: 'setup',
+    //   testMatch: "auth.setup.ts"
+    // },
+    // {
+    //   name: 'api-test',
+    //   dependencies: ["setup"],
+    // },
     // {
     //   name: 'chromium',
     //   use: { ...devices['Desktop Chrome'] },

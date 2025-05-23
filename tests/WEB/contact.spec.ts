@@ -1,12 +1,24 @@
 import { test, expect } from '@playwright/test';
 import { authPages } from '../../pages/auth.pages';
+import { contactPages } from '../../pages/contact.spec';
+
+test.use({ storageState: './data/auth/userCookies.json' });
 
 test('Add contact list', async ({page}) => {
-    
-})
-test('Edit contact list', async ({page}) => {
+
+    await test.step('with valid input value', async () => {
+        const contactpages = new contactPages(page);
+
+        await page.goto("/contactList");
+        await contactpages.addContact({});
+    })
 
 })
-test('remove contact list', async ({page}) => {
+
+test.skip('Edit contact list', async ({page}) => {
+
+})
+
+test.skip('remove contact list', async ({page}) => {
 
 })

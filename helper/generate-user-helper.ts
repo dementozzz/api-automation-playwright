@@ -19,21 +19,21 @@ export async function GenerateEmail(firstname : string, lastname : string){
 
 export async function CreateContact(
     obj : {
-        firstname: boolean, 
-        lastname: boolean, 
-        birthday: boolean, 
-        phone : boolean, 
-        email : boolean, 
-        postalCode : boolean
+        firstname?: boolean, 
+        lastname?: boolean, 
+        birthday?: boolean, 
+        phone?: boolean, 
+        email?: boolean, 
+        postalCode?: boolean
     }){
 
-    let firstName = obj.firstname ? faker.person.firstName() : "";
-    let lastname = obj.lastname? faker.person.lastName() : "";
+    let firstName = obj.firstname != null ? obj.firstname? faker.person.firstName() : "" : faker.person.firstName();
+    let lastname = obj.lastname != null ? obj.lastname? faker.person.lastName() : "" : faker.person.lastName();
 
-    let birthDate = obj.birthday? await GenerateBirthdate() : "";
-    let email = obj.email? await GenerateEmail(firstName, lastname) : "";
-    let phoneNumber = obj.phone? faker.phone.number({style : 'international'}) : ""
-    let postalCode = obj.postalCode? faker.location.zipCode() : ""
+    let birthDate = obj.birthday != null ? obj.birthday ? await GenerateBirthdate() : "" : await GenerateBirthdate();
+    let email = obj.email != null ? obj.email ? await GenerateEmail(firstName, lastname) : "" : await GenerateEmail(firstName, lastname);
+    let phoneNumber = obj.phone != null ? obj.phone? faker.phone.number({style : 'international'}) : "" : faker.phone.number({style : 'international'}) ;
+    let postalCode = obj.postalCode != null ? obj.postalCode? faker.location.zipCode() : "" : faker.location.zipCode() ;
 
     return{
         firstName : firstName,
