@@ -62,20 +62,27 @@ export class contactPages{
 
         if(count > 0){
             await this.page.locator("//tr[@class='contactTableBodyRow']").first().click();
-            await this.page.locator("//button[@id='edit-contact']").click();
-
+            
+            await this.page.locator("//span[@id='birthdate']").waitFor()
             const birthdate = await this.page.locator("//span[@id='birthdate']").textContent()
             const phone = await this.page.locator("//span[@id='phone']").textContent()
             const street1 = await this.page.locator("//span[@id='street1']").textContent()
             const street2 = await this.page.locator("//span[@id='street2']").textContent()
+            await this.page.locator("//button[@id='edit-contact']").click();
 
-            await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/editContact")
+            // await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/editContact")
+            
+            await this.page.locator("//input[@id='firstName']").waitFor();
+            
+            await expect.poll(async () => {
+                const value = await this.page.locator("//input[@id='firstName']").inputValue();
+                return value;
+            }).not.toBe('');
+
             
             let body = await CreateContact({
                 firstname : false,
                 lastname : false,
-                birthday : true,
-                phone : true, 
                 email : false,
                 postalCode : false
             });
@@ -88,8 +95,8 @@ export class contactPages{
 
             await this.page.locator("//button[@id='submit']").click();
 
-            await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/editContact");
-
+            
+            await this.page.locator("//span[@id='birthdate']").waitFor()
             const newbirthdate = await this.page.locator("//span[@id='birthdate']").textContent()
             const newphone = await this.page.locator("//span[@id='phone']").textContent()
             const newstreet1 = await this.page.locator("//span[@id='street1']").textContent()
@@ -107,22 +114,25 @@ export class contactPages{
 
     async removeContact(){
         this.page.on('dialog', async dialog => {
-            console.log(dialog.message());
             await dialog.accept();
         });
         
         await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
         const count = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
+        console.log("CURRENT DATA COUNT: " + count)
 
         if(count > 0){
             await this.page.locator("//tr[@class='contactTableBodyRow']").first().click();
             await this.page.locator("//button[@id='delete']").click();
 
             await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/contactList");
+
             await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
             const finalDataCount = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
 
+            console.log("UPDATED DATA COUNT: " + finalDataCount)
             expect(finalDataCount).toBeLessThan(count)
+            
         }else{
             return
         }
