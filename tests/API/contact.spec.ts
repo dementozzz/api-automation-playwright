@@ -1,20 +1,13 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
-import { CreateContact } from '../helper/generate-user-helper'
-import { validateJsonSchema } from '../helper/schema-helper';
+import { CreateContact } from '../../helper/generate-user-helper'
+import { validateJsonSchema } from '../../helper/schema-helper';
 require('dotenv').config();
 
 
 test('add new contact', async ({ request }) => {
   
-const body = await CreateContact({
-    firstname : true,
-    lastname : true,
-    birthday : true,
-    phone : true , 
-    email : true,
-    postalCode : true
-  });
+const body = await CreateContact({});
 
   const header = {
     'Authorization' : 'Bearer ' + process.env.ACCESS_TOKEN
@@ -28,7 +21,6 @@ const body = await CreateContact({
     });
     
     expect(res.status()).toEqual(201);
-
     const json = await res.json();
 
     await validateJsonSchema("contact-add.json", json);
@@ -62,14 +54,7 @@ test('get contact list', async ({ request }) => {
 
 test('add new contact - with no authorization header', async ({ request }) => {
   
-  const body = await CreateContact({
-    firstname : true,
-    lastname : true,
-    birthday : true,
-    phone : true , 
-    email : true,
-    postalCode : true
-  });
+  const body = await CreateContact({});
 
   try {
     const res = await request.post('/contacts', 
@@ -92,11 +77,6 @@ test('add new contact - with no firstname', async ({ request }) => {
   
   const body = await CreateContact({
     firstname : false,
-    lastname : true,
-    birthday : true,
-    phone : true , 
-    email : true,
-    postalCode : true
   });
 
   const header = {
@@ -124,12 +104,7 @@ test('add new contact - with no firstname', async ({ request }) => {
 test('add new contact - with no lastname', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : true,
     lastname : false,
-    birthday : true,
-    phone : true , 
-    email : true,
-    postalCode : true
   });
 
   const header = {
@@ -157,12 +132,7 @@ test('add new contact - with no lastname', async ({ request }) => {
 test('add new contact - with no birthday', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : true,
-    lastname : true,
     birthday : false,
-    phone : true , 
-    email : true,
-    postalCode : true
   });
 
   const header = {
@@ -191,11 +161,7 @@ test('add new contact - with no phone number', async ({ request }) => {
   
   const body = await CreateContact({
     firstname : false,
-    lastname : true,
-    birthday : true,
-    phone : false , 
-    email : true,
-    postalCode : true
+    phone : false, 
   });
 
   const header = {
@@ -223,12 +189,7 @@ test('add new contact - with no phone number', async ({ request }) => {
 test('add new contact - with no email', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : true,
-    lastname : true,
-    birthday : true,
-    phone : true , 
-    email : false,
-    postalCode : true
+    email : false
   });
 
   const header = {
@@ -256,11 +217,6 @@ test('add new contact - with no email', async ({ request }) => {
 test('add new contact - with no postal code', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : true,
-    lastname : true,
-    birthday : true,
-    phone : true , 
-    email : true,
     postalCode : false
   });
 

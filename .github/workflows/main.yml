@@ -32,6 +32,17 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
+    - name: Create .env file
+      env:
+        ENV_TEMPLATE: |
+          EMAIL=$DB_EMAIL
+          PASSWORD=$DB_PASSWORD
+      run: |
+        echo "$ENV_TEMPLATE" > .env
+        sed -i "s|\$DB_USERNAME|${{ secrets.DB_EMAIL }}|g" .env
+        sed -i "s|\$DB_PASSWORD|${{ secrets.DB_PASSWORD }}|g" .env
+        
+
     - name: Run Playwright tests
       run: npx playwright test
 

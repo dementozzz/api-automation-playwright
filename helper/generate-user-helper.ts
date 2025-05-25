@@ -14,27 +14,48 @@ export async function GenerateBirthdate(){
 
 export async function GenerateEmail(firstname : string, lastname : string){
     let email = firstname + lastname + "@gmail.com"
-
     return email
 }
 
 export async function CreateContact(
     obj : {
-        firstname: boolean, 
-        lastname: boolean, 
-        birthday: boolean, 
-        phone : boolean, 
-        email : boolean, 
-        postalCode : boolean
+        firstname?: boolean, 
+        lastname?: boolean, 
+        birthday?: boolean, 
+        phone?: boolean, 
+        email?: boolean, 
+        postalCode?: boolean
     }){
 
-    let firstName = obj.firstname ? faker.person.firstName() : "";
-    let lastname = obj.lastname? faker.person.lastName() : "";
+    let firstName = 
+        obj.firstname != null ? obj.firstname? faker.person.firstName() 
+        : "" 
+        : faker.person.firstName();
 
-    let birthDate = obj.birthday? await GenerateBirthdate() : "";
-    let email = obj.email? await GenerateEmail(firstName, lastname) : "";
-    let phoneNumber = obj.phone? faker.phone.number({style : 'international'}) : ""
-    let postalCode = obj.postalCode? faker.location.zipCode() : ""
+    let lastname = 
+        obj.lastname != null ? obj.lastname? faker.person.lastName() 
+        : "" 
+        : faker.person.lastName();
+
+    let birthDate = 
+        obj.birthday != null ? obj.birthday ? await GenerateBirthdate() 
+        : "" 
+        : await GenerateBirthdate();
+
+    let email = 
+        obj.email != null ? obj.email ? await GenerateEmail(firstName, lastname) 
+        : "" 
+        : await GenerateEmail(firstName, lastname);
+
+    let phoneNumber = 
+        obj.phone != null ? obj.phone? faker.phone.number({style : 'international'}) 
+        : "" 
+        : faker.phone.number({style : 'international'});
+
+    let postalCode = 
+        obj.postalCode != null ? obj.postalCode? faker.location.zipCode() 
+        : "" 
+        : faker.location.zipCode();
 
     return{
         firstName : firstName,
@@ -49,32 +70,4 @@ export async function CreateContact(
         postalCode : postalCode,
         country : faker.location.country()
     }
-}
-
-export async function test(){
-    // fs.readFile('data.ndjson', 'utf8', (err, data) => {
-    //     if (err) {
-    //       console.error('Error reading file:', err);
-    //       return;
-    //     }
-      
-    //     // Split by newlines to separate each JSON object
-    //     const lines = data.split('\n').filter(line => line.trim() !== '');
-      
-    //     // Parse each line as a separate JSON object
-    //     const parsedData = lines.map(line => {
-    //       try {
-    //         return JSON.parse(line);
-    //       } catch (err) {
-    //         console.error('Error parsing line:', line, err);
-    //         return null;
-    //       }
-    //     }).filter(Boolean); // Remove any failed parses
-      
-    //     // Log the results
-    //     console.log(parsedData); // Array of objects
-    //     parsedData.forEach(person => {
-    //       console.log(`${person.firstName} ${person.lastName}`);
-    //     });
-    // });
 }
