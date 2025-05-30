@@ -7,10 +7,6 @@ export class authPages {
         this.page = page;
     }
 
-    async goto(){
-        await this.page.goto('/');
-    }
-
     async login(obj : {
         email : string,
         password : string

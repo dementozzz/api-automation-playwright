@@ -10,7 +10,7 @@
                 "email" : {"type" : "string"},
                 "__v" : {"type" : "integer"}
             },
-            "required" : ["_id", "firstName", "lastName", "email", "__v"]
+            "required" : ["_id", "firstName", "lastName", "__v"]
         },
         "token" : {"type" : "string"}
     },

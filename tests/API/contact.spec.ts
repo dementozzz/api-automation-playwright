@@ -76,7 +76,7 @@ test('add new contact - with no authorization header', async ({ request }) => {
 test('add new contact - with no firstname', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : false,
+    firstname : "",
   });
 
   const header = {
@@ -104,7 +104,7 @@ test('add new contact - with no firstname', async ({ request }) => {
 test('add new contact - with no lastname', async ({ request }) => {
   
   const body = await CreateContact({
-    lastname : false,
+    lastname : "",
   });
 
   const header = {
@@ -132,7 +132,7 @@ test('add new contact - with no lastname', async ({ request }) => {
 test('add new contact - with no birthday', async ({ request }) => {
   
   const body = await CreateContact({
-    birthday : false,
+    birthday : "",
   });
 
   const header = {
@@ -160,8 +160,7 @@ test('add new contact - with no birthday', async ({ request }) => {
 test('add new contact - with no phone number', async ({ request }) => {
   
   const body = await CreateContact({
-    firstname : false,
-    phone : false, 
+    phone : "", 
   });
 
   const header = {
@@ -189,7 +188,7 @@ test('add new contact - with no phone number', async ({ request }) => {
 test('add new contact - with no email', async ({ request }) => {
   
   const body = await CreateContact({
-    email : false
+    email : ""
   });
 
   const header = {
@@ -217,7 +216,7 @@ test('add new contact - with no email', async ({ request }) => {
 test('add new contact - with no postal code', async ({ request }) => {
   
   const body = await CreateContact({
-    postalCode : false
+    postalCode : ""
   });
 
   const header = {

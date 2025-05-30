@@ -1,72 +1,108 @@
 import { test, expect } from '@playwright/test';
-import { authPages } from '../../pages/auth.pages';
-import { GenerateBirthdate } from '../../helper/generate-user-helper';
+import { CreateContact, GenerateBirthdate } from '../../helper/generate-user-helper';
 import { contactPages } from '../../pages/contact.pages';
-import { error } from 'console';
+
 
 test.use({ storageState: './data/auth/user-cookies.json' });
 
-test.skip('Add contact list', async ({page}) => {
+// test('test', async ({page}) => {
+//     const contactpages = new contactPages(page);
 
-    await test.step.skip('Without first name', async () => {
+//     await page.goto("/contactList");
+
+//     await page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
+//     await page.locator("//tr[@class='contactTableBodyRow']").first().click();
+//     const currentData = await contactpages.getUserData();
+// })
+
+test.describe('Add contact list', async () => {
+
+    test('Without first name', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
         await contactpages.addContact({
-            firstname : false
+            firstname : ""
         });
+
+        await page.waitForEvent('requestfinished');
+        await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+        const errorElement = await page.locator("//span[@id='error']").innerText();
+        expect(errorElement).not.toBeNull();
+        console.log("ERROR TEXT = " + errorElement)
     })
 
-    await test.step.skip('Without last name', async () => {
+    test('Without last name', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
         await contactpages.addContact({
-            lastname : false
+            lastname : ""
         });
+
+        await page.waitForEvent('requestfinished');
+        await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+        const errorElement = await page.locator("//span[@id='error']").innerText();
+        expect(errorElement).not.toBeNull();
+        console.log("ERROR TEXT = " + errorElement)
     })
 
-    await test.step.skip('Without birthday', async () => {
+    test('With invalid format of birthdate', async ({page}) => {
+        const contactpages = new contactPages(page);
+        
+        await page.goto("/contactList");
+        await contactpages.addContact({
+            birthday: "000--1762asd"
+        });
+
+        await page.waitForEvent('requestfinished');
+        await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+
+        const errorElement = await page.locator("//span[@id='error']").innerText();
+        expect(errorElement).toEqual('Contact validation failed: birthdate: Birthdate is invalid');
+        console.log("ERROR TEXT = " + errorElement)
+    })
+
+    test('With invalid format of phone number', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
         await contactpages.addContact({
-            birthday: false
+            phone: "01291qweqwe"
         });
+
+        await page.waitForEvent('requestfinished');
+        await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+        
+        const errorElement = await page.locator("//span[@id='error']").innerText();
+        expect(errorElement).not.toBeNull();
+        console.log("ERROR TEXT = " + errorElement)
     })
 
-    await test.step.skip('Without phone number', async () => {
+    test('With invalid format of email', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
         await contactpages.addContact({
-            phone: false
+            email: "emaildotcom"
         });
+
+        await page.waitForEvent('requestfinished');
+        await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+        const errorElement = await page.locator("//span[@id='error']").innerText();
+        expect(errorElement).not.toBeNull();
+        console.log("ERROR TEXT = " + errorElement)
     })
 
-    await test.step.skip('Without email', async () => {
+    test('with valid input value', async ({page}) => {
         const contactpages = new contactPages(page);
 
-        await page.goto("/contactList");
-        await contactpages.addContact({
-            email: false
-        });
-    })
-
-    await test.step.skip('Without postal code', async () => {
-        const contactpages = new contactPages(page);
-
-        await page.goto("/contactList");
-        await contactpages.addContact({
-            postalCode: false
-        });
-    })
-
-    await test.step('with valid input value', async () => {
-        const contactpages = new contactPages(page);
-
-        await page.goto("/contactList");
+        const currentdata = await contactpages.countListData();
         await contactpages.addContact({});
+        const latestData = await contactpages.countListData();
+
+        //make sure the updated list has more data than before
+        expect.soft(latestData).toBeGreaterThan(currentdata)
     })
 })
 
@@ -79,22 +115,33 @@ test('Edit contact list', async ({page}) => {
         await page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
         await page.locator("//tr[@class='contactTableBodyRow']").first().click();
         const currentData = await contactpages.getUserData();
-
-        const birthday = await GenerateBirthdate();
+        
+        const contact = await CreateContact({})
 
         await contactpages.editContact({
-            birthdate : birthday
+            birthdate : contact.birthdate,
+            street1 : contact.street1,
+            phone : contact.phone
         });
+
+        page.waitForEvent('requestfinished');
         const latestData = await contactpages.getUserData();
 
         expect.soft(currentData.birthdate).not.toEqual(latestData.birthdate);
-        console.log("expect birthdate (" + currentData.birthdate + ") to equal (" + latestData.birthdate + ")") 
+        console.log("expect birthdate (" + currentData.birthdate + ") to NOT equal (" + latestData.birthdate + ")") 
+
+        expect.soft(currentData.street1).not.toEqual(latestData.street1);
+        console.log("expect birthdate (" + currentData.street1 + ") to NOT equal (" + latestData.street1 + ")") 
+
+        expect.soft(currentData.phone).not.toEqual(latestData.phone);
+        console.log("expect birthdate (" + currentData.phone + ") to NOT equal (" + latestData.phone + ")") 
+
     } catch (error) {
         throw (error);
     } 
 })
 
-test.skip('remove contact list', async ({page}) => {
+test('remove contact list', async ({page}) => {
     const contactpages = new contactPages(page);
 
     await page.goto("/contactList");

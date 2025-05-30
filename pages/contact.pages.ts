@@ -8,32 +8,34 @@ export class contactPages{
         this.page = page;
     }
 
-    async goto(){
-        await this.page.goto('/');
+    async test(obj : {
+        value? : string,
+        data? : string
+    }){
+        console.log("VALUE TEST = " + obj.value)
+        console.log("DATA TEST = " + obj.data)
     }
 
     async addContact(obj : {
-        firstname?: boolean,
-        lastname?: boolean,
-        birthday?: boolean,
-        phone?: boolean, 
-        email?: boolean,
-        postalCode?: boolean
+        firstname?: string,
+        lastname?: string,
+        birthday?: string,
+        phone?: string, 
+        email?: string,
+        postalCode?: string
     }){
 
-        let body = await CreateContact({
-            firstname : obj.firstname ?? true,
-            lastname : obj.lastname ?? true,
-            birthday : obj.birthday ?? true,
-            phone : obj.phone ?? true, 
-            email : obj.email ?? true,
-            postalCode : obj.postalCode ?? true
+        const body = await CreateContact({
+            firstname : obj.firstname,
+            lastname : obj.lastname,
+            birthday : obj.birthday,
+            phone : obj.phone, 
+            email : obj.email,
+            postalCode : obj.postalCode
         });
 
-        await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
-        const countdata = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
-
         await this.page.locator("//button[@id='add-contact']").click();
+
         await this.page.locator("//input[@id='firstName']").fill(body.firstName);
         await this.page.locator("//input[@id='lastName']").fill(body.lastName);
         await this.page.locator("//input[@id='birthdate']").fill(body.birthdate);
@@ -47,14 +49,6 @@ export class contactPages{
         await this.page.locator("//input[@id='country']").fill(body.country);
 
         await this.page.locator("//button[@id='submit']").click();
-
-        await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/contactList");
-        await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
-        const newcountdata = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
-        
-        //make sure the updated list has more data than before
-        await expect.soft(newcountdata).toBeGreaterThan(countdata)
-
     }
 
     async editContact(obj : {
@@ -71,51 +65,77 @@ export class contactPages{
         country? : string
     }){        
         await this.page.locator("//button[@id='edit-contact']").click();
+
+        await this.page.waitForEvent('requestfinished');
+        
         await this.page.locator("//input[@id='firstName']").waitFor();           
         await expect.poll(async () => {
             const value = await this.page.locator("//input[@id='firstName']").inputValue();
             return value;
         }).not.toBe('');
 
-        if(obj.firstName != "" && typeof obj.firstName == 'string'){
+        if(typeof obj.firstName != 'undefined'){
             await this.page.locator("//input[@id='firstName']").fill(obj.firstName as string);
+            // console.log("IUNDEFINED")
         }
-        if(obj.lastName != "" && typeof obj.lastName == 'string'){
+        if(typeof obj.lastName != 'undefined'){
             await this.page.locator("//input[@id='lastName']").fill(obj.lastName as string);
         }
-        if(obj.birthdate != "" && typeof obj.birthdate == 'string'){
+        if(typeof obj.birthdate != 'undefined'){
             await this.page.locator("//input[@id='birthdate']").fill(obj.birthdate as string);
         }
-        if(obj.email != "" && typeof obj.email == 'string'){
+        if(typeof obj.email != 'undefined'){
             await this.page.locator("//input[@id='email']").fill(obj.email as string);
         }
-        if(obj.phone != "" && typeof obj.phone == 'string'){
+        if(typeof obj.phone != 'undefined'){
             await this.page.locator("//input[@id='phone']").fill(obj.phone as string);
         }
-        if(obj.street1 != "" && typeof obj.street1 == 'string'){
+        if(typeof obj.street1 != 'undefined'){
             await this.page.locator("//input[@id='street1']").fill(obj.street1 as string);
         }
-        if(obj.street2 != "" && typeof obj.street2 == 'string'){
+        if(typeof obj.street2 != 'undefined'){
             await this.page.locator("//input[@id='street2']").fill(obj.street2 as string);
         }
-        if(obj.city != "" && typeof obj.city == 'string'){
+        if(typeof obj.city != 'undefined'){
             await this.page.locator("//input[@id='city']").fill(obj.city as string);
         }
-        if(obj.stateProvince != "" && typeof obj.stateProvince == 'string'){
+        if(typeof obj.stateProvince != 'undefined'){
             await this.page.locator("//input[@id='stateProvince']").fill(obj.stateProvince as string);
         }
-        if(obj.country != "" && typeof obj.country == 'string'){
+        if(typeof obj.country != 'undefined'){
             await this.page.locator("//input[@id='country']").fill(obj.country as string);
         }
-        if(obj.postalCode != "" && typeof obj.postalCode == 'string'){
+        if(typeof obj.postalCode != 'undefined'){
             await this.page.locator("//input[@id='postalCode']").fill(obj.postalCode as string);
         }
         
         await this.page.locator("//button[@id='submit']").click();        
     }
 
+    async countListData(){
+        let countData = 0
+
+        //after navigate into contact list page, wait for specific URL response and retrieve the data
+        await this.page.goto("/contactList");
+        const response = await this.page.waitForResponse('https://thinking-tester-contact-list.herokuapp.com/contacts');
+        const data = await response.json();
+
+        // Check if data is an array and get its length
+        const totalDataCount = Array.isArray(data) ? data.length : 0;
+        console.log("Data fetched:", totalDataCount);
+
+        //if data from response is more than 0, start count from UI perspective 
+        if(totalDataCount > 0){
+            await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
+            countData = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
+        }
+        
+        return countData;
+    }
+
     async getUserData(){
-        await this.page.locator("//span[@id='birthdate']").waitFor();
+        // await this.page.waitForEvent('requestfinished');
+        await this.page.locator("//span[@id='firstName']").waitFor({state: 'visible'});
 
         const firstname = await this.page.locator("//span[@id='firstName']").textContent();
         const lastname = await this.page.locator("//span[@id='lastName']").textContent();

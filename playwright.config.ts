@@ -36,12 +36,12 @@ export default defineConfig({
   projects: [
     {
       name: 'web',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Firefox'] },
       testDir: './tests/WEB'
     },
     {
       name: 'api',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Firefox'] },
       testDir: './tests/API'
     }
     // {
