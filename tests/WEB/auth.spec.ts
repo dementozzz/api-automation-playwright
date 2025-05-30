@@ -6,12 +6,12 @@ const email = process.env.EMAIL as string
 const password = process.env.PASSWORD as string
 
 
-test('login', async ({page}) => {
+test.describe('login', async () => {
 
-    await test.step('with invalid credential', async() => {
+    test('with invalid credential', async({page}) => {
         const authpages = new authPages(page);
 
-        await authpages.goto();
+        await page.goto('/')
         await authpages.login({
             email : "asdasd",
             password : "1234"
@@ -21,10 +21,10 @@ test('login', async ({page}) => {
         await expect(errorElement).toContainText("Incorrect username or password");
     })
 
-    await test.step('with valid credential', async () => {
+    test('with valid credential', async ({page}) => {
         const authpages = new authPages(page);
 
-        await authpages.goto();
+        await page.goto('/')
         await authpages.login({
             email : email,
             password : password

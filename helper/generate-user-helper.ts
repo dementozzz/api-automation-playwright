@@ -19,43 +19,43 @@ export async function GenerateEmail(firstname : string, lastname : string){
 
 export async function CreateContact(
     obj : {
-        firstname?: boolean, 
-        lastname?: boolean, 
-        birthday?: boolean, 
-        phone?: boolean, 
-        email?: boolean, 
-        postalCode?: boolean
+        firstname?: string, 
+        lastname?: string, 
+        birthday?: string, 
+        phone?: string, 
+        email?: string, 
+        postalCode?: string
     }){
 
     let firstName = 
-        obj.firstname != null ? obj.firstname? faker.person.firstName() 
-        : "" 
+        typeof obj.firstname != "undefined" ? obj.firstname == "<generate>" ? faker.person.firstName() 
+        : obj.firstname
         : faker.person.firstName();
 
     let lastname = 
-        obj.lastname != null ? obj.lastname? faker.person.lastName() 
-        : "" 
+        typeof obj.lastname != "undefined" ? obj.lastname == "<generate>" ? faker.person.lastName() 
+        : obj.lastname
         : faker.person.lastName();
 
     let birthDate = 
-        obj.birthday != null ? obj.birthday ? await GenerateBirthdate() 
-        : "" 
-        : await GenerateBirthdate();
+        typeof obj.birthday != "undefined" ? obj.birthday == "<generate>" ? await GenerateBirthdate() 
+        : obj.birthday
+        : await GenerateBirthdate() ;
 
     let email = 
-        obj.email != null ? obj.email ? await GenerateEmail(firstName, lastname) 
-        : "" 
+        typeof obj.email != "undefined" ? obj.email == "<generate>" ? await GenerateEmail(firstName, lastname) 
+        : obj.email
         : await GenerateEmail(firstName, lastname);
 
     let phoneNumber = 
-        obj.phone != null ? obj.phone? faker.phone.number({style : 'international'}) 
-        : "" 
+        typeof obj.phone != "undefined" ? obj.phone == "<generate>" ? faker.phone.number({style : 'international'}) 
+        : obj.phone
         : faker.phone.number({style : 'international'});
 
     let postalCode = 
-        obj.postalCode != null ? obj.postalCode? faker.location.zipCode() 
-        : "" 
-        : faker.location.zipCode();
+        typeof obj.postalCode != "undefined" ? obj.postalCode == "<generate>" ? faker.location.zipCode()  
+        : obj.postalCode
+        : faker.location.zipCode() ;
 
     return{
         firstName : firstName,
