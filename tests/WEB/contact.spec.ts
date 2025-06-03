@@ -1,19 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { CreateContact, GenerateBirthdate } from '../../helper/generate-user-helper';
-import { contactPages } from '../../pages/contact.pages';
+import { CreateContact } from '../../src/helper/generate-user-helper';
+import { contactPages } from '../../src/pages/contact.pages';
 
 
 test.use({ storageState: './data/auth/user-cookies.json' });
-
-// test('test', async ({page}) => {
-//     const contactpages = new contactPages(page);
-
-//     await page.goto("/contactList");
-
-//     await page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
-//     await page.locator("//tr[@class='contactTableBodyRow']").first().click();
-//     const currentData = await contactpages.getUserData();
-// })
 
 test.describe('Add contact list', async () => {
 
@@ -27,6 +17,7 @@ test.describe('Add contact list', async () => {
 
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+
         const errorElement = await page.locator("//span[@id='error']").innerText();
         expect(errorElement).not.toBeNull();
         console.log("ERROR TEXT = " + errorElement)
@@ -42,6 +33,7 @@ test.describe('Add contact list', async () => {
 
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+
         const errorElement = await page.locator("//span[@id='error']").innerText();
         expect(errorElement).not.toBeNull();
         console.log("ERROR TEXT = " + errorElement)
@@ -73,7 +65,7 @@ test.describe('Add contact list', async () => {
 
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
-        
+
         const errorElement = await page.locator("//span[@id='error']").innerText();
         expect(errorElement).not.toBeNull();
         console.log("ERROR TEXT = " + errorElement)
@@ -89,6 +81,7 @@ test.describe('Add contact list', async () => {
 
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
+
         const errorElement = await page.locator("//span[@id='error']").innerText();
         expect(errorElement).not.toBeNull();
         console.log("ERROR TEXT = " + errorElement)

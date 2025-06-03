@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { authPages } from '../../pages/auth.pages';
+import { authPages } from '../../src/pages/auth.pages';
 require('dotenv').config();
 
 const email = process.env.EMAIL as string
