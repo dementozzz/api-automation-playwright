@@ -37,7 +37,6 @@ jobs:
           ${{ runner.os }}-playwright-
 
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
       run: npm ci
 
     - name: Install Playwright Browsers
