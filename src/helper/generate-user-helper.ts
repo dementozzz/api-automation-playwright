@@ -8,13 +8,13 @@ export async function GenerateBirthdate(){
     let year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
     let month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
     let day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-    let finalDate = year + '-'+ month +'-'+ day ;
+    let finalDate = year + '-'+ month +'-'+ day;
     return finalDate;
 }
 
 export async function GenerateEmail(firstname : string, lastname : string){
-    let email = firstname + lastname + "@gmail.com"
-    return email
+    let email = firstname + lastname + "@gmail.com";
+    return email;
 }
 
 export async function CreateContact(
@@ -28,34 +28,28 @@ export async function CreateContact(
     }){
 
     let firstName = 
-        typeof obj.firstname != "undefined" ? obj.firstname == "<generate>" ? faker.person.firstName() 
-        : obj.firstname
+        typeof obj.firstname != "undefined" ? obj.firstname
         : faker.person.firstName();
 
     let lastname = 
-        typeof obj.lastname != "undefined" ? obj.lastname == "<generate>" ? faker.person.lastName() 
-        : obj.lastname
+        typeof obj.lastname != "undefined" ? obj.lastname
         : faker.person.lastName();
 
     let birthDate = 
-        typeof obj.birthday != "undefined" ? obj.birthday == "<generate>" ? await GenerateBirthdate() 
-        : obj.birthday
+        typeof obj.birthday != "undefined" ? obj.birthday
         : await GenerateBirthdate() ;
 
     let email = 
-        typeof obj.email != "undefined" ? obj.email == "<generate>" ? await GenerateEmail(firstName, lastname) 
-        : obj.email
+        typeof obj.email != "undefined" ? obj.email
         : await GenerateEmail(firstName, lastname);
 
     let phoneNumber = 
-        typeof obj.phone != "undefined" ? obj.phone == "<generate>" ? faker.phone.number({style : 'international'}) 
-        : obj.phone
+        typeof obj.phone != "undefined" ? obj.phone
         : faker.phone.number({style : 'international'});
 
     let postalCode = 
-        typeof obj.postalCode != "undefined" ? obj.postalCode == "<generate>" ? faker.location.zipCode()  
-        : obj.postalCode
-        : faker.location.zipCode() ;
+        typeof obj.postalCode != "undefined" ? obj.postalCode
+        : faker.location.zipCode();
 
     return{
         firstName : firstName,
