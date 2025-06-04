@@ -1,19 +1,11 @@
-import { test, expect, Page } from '@playwright/test' ;
-import { CreateContact } from '../helper/generate-user-helper'
+import { expect, Page } from '@playwright/test' ;
+import { CreateContact } from '../helper/generate-user-helper';
 
 export class contactPages{
     readonly page:Page
 
     constructor(page : Page){
         this.page = page;
-    }
-
-    async test(obj : {
-        value? : string,
-        data? : string
-    }){
-        console.log("VALUE TEST = " + obj.value)
-        console.log("DATA TEST = " + obj.data)
     }
 
     async addContact(obj : {
@@ -63,20 +55,21 @@ export class contactPages{
         stateProvince? : string,
         postalCode? : string,
         country? : string
-    }){        
+    }){       
+        //navigate to edit contact page 
         await this.page.locator("//button[@id='edit-contact']").click();
 
-        await this.page.waitForEvent('requestfinished');
-        
+        //Wait until page is finish load
+        await this.page.waitForEvent('requestfinished'); 
         await this.page.locator("//input[@id='firstName']").waitFor();           
         await expect.poll(async () => {
             const value = await this.page.locator("//input[@id='firstName']").inputValue();
             return value;
         }).not.toBe('');
 
+        //fill the input if there is any data requested
         if(typeof obj.firstName != 'undefined'){
             await this.page.locator("//input[@id='firstName']").fill(obj.firstName as string);
-            // console.log("IUNDEFINED")
         }
         if(typeof obj.lastName != 'undefined'){
             await this.page.locator("//input[@id='lastName']").fill(obj.lastName as string);
@@ -109,6 +102,7 @@ export class contactPages{
             await this.page.locator("//input[@id='postalCode']").fill(obj.postalCode as string);
         }
         
+        //Click button submit & navigate back to contact list page
         await this.page.locator("//button[@id='submit']").click();        
     }
 
@@ -134,7 +128,7 @@ export class contactPages{
     }
 
     async getUserData(){
-        // await this.page.waitForEvent('requestfinished');
+        
         await this.page.locator("//span[@id='firstName']").waitFor({state: 'visible'});
 
         const firstname = await this.page.locator("//span[@id='firstName']").textContent();

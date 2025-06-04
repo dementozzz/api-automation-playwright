@@ -1,7 +1,7 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
-import { CreateContact } from '../../helper/generate-user-helper'
-import { validateJsonSchema } from '../../helper/schema-helper';
+import { CreateContact } from '../../src/helper/generate-user-helper'
+import { validateJsonSchema } from '../../src/helper/schema-helper';
 require('dotenv').config();
 
 
