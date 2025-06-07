@@ -10,6 +10,10 @@ jobs:
     begin:
         runs-on: ubuntu-latest 
         steps:
+        - name: Checkout the repo
+          uses: actions/checkout@v4
+          with:
+            persist-credentials: false
 
         - name: trigger slack notification
           uses:  slackapi/slack-github-action@v2.1.0
