@@ -1,7 +1,11 @@
 name: Slack notification test
 on:
     workflow_dispatch:
-
+        inputs:
+            test_type:
+                description: 'Select test type to run'
+                required: true
+                type: string
 jobs:
     begin:
         runs-on: ubuntu-latest 
