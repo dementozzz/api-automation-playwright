@@ -10,7 +10,7 @@ jobs:
         - name: trigger slack notification
           uses:  slackapi/slack-github-action@v2.1.0
           with:
-            payload-file-path: "/.github/actions/slack/slack-test-summary.json"
+            payload-file-path: "./workflows/slack-test-summary.json"
             payload-templated: true
             webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
             webhook-type: incoming-webhook
