@@ -30,7 +30,7 @@ jobs:
             fi
             end=$(date +%s)
             DURATION=$(echo "$end - $start" | bc)
-            FORMATTED_DURATION=$(date -u -d @${DURATION_SECONDS} +"%H:%M:%S")
+            FORMATTED_DURATION=$(date -u -d @${DURATION} +"%H:%M:%S")
             echo "payload=$PAYLOAD" >> $GITHUB_OUTPUT
             echo "duration=$FORMATTED_DURATION" >> $GITHUB_OUTPUT
 
