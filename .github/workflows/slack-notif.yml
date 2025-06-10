@@ -23,10 +23,10 @@ jobs:
           id: slack_payload
           run: |
             start=$(date +%s)
-            if[ "${{ github.event.inputs.test_type }}" == "success-notification" ]; then
-            PAYLOAD='.github/actions/slack/test-summary-success.json'
+            if [ "${{ github.event.inputs.test_type }}" == "success-notification" ]; then
+              PAYLOAD='.github/actions/slack/test-summary-success.json'
             else
-            PAYLOAD='.github/actions/slack/test-summary-failed.json'
+              PAYLOAD='.github/actions/slack/test-summary-failed.json'
             fi
             end=$(date +%s)
             DURATION=$(echo "$end - $start" | bc)
