@@ -1,11 +1,15 @@
 name: Slack notification test
 on:
     workflow_dispatch:
-        inputs:
-            test_type:
-                description: 'Select test type to run'
-                required: true
-                type: string
+       inputs:
+        test_type:
+            description: 'Select notification type'
+            required: true
+            default: 'success-notification'
+            type: choice
+            options: 
+            - success-notification
+            - fail-notification
 jobs:
     begin:
         runs-on: ubuntu-latest 
@@ -14,13 +18,39 @@ jobs:
           uses: actions/checkout@v4
           with:
             persist-credentials: false
-
-        - name: trigger slack notification
-          uses:  slackapi/slack-github-action@v2.1.0
-          with:
-            payload-file-path: ${{ github.event.inputs.test_type }}
+        
+        - name: trigger slack initiate notification
+          uses: slackapi/slack-github-action@v2.1.0
+          with: 
+            payload-file-path: ".github/actions/slack/test-slack-initiate.json"
             payload-templated: true
             webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
             webhook-type: incoming-webhook
-        env :
+          env :
             SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+
+        - name: Determine payload slack notification
+          id: slack_payload
+          run: |
+            start=$(date +%s)
+            if[ "${{ github.event.inputs.test_type }}" == "success-notification" ]; then
+            PAYLOAD='.github/actions/slack/test-summary-success.json'
+            else
+            PAYLOAD='.github/actions/slack/test-summary-failed.json'
+            fi
+            end=$(date +%s)
+            DURATION=$(echo "$end - $start" | bc)
+            echo "payload=$PAYLOAD" >> $GITHUB_OUTPUT
+            echo "duration=$DURATION" >> $GITHUB_OUTPUT
+
+        - name: trigger slack notification
+          uses: slackapi/slack-github-action@v2.1.0
+          with:
+            payload-file-path: ${{ steps.slack_payload.outputs.payload }}
+            payload-templated: true
+            webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+            webhook-type: incoming-webhook
+          env :
+            SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }},
+            SLACK_DURATION: ${{ steps.slack_payload.outputs.duration }}
+            
