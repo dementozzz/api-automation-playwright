@@ -30,8 +30,9 @@ jobs:
             fi
             end=$(date +%s)
             DURATION=$(echo "$end - $start" | bc)
+            FORMATTED_DURATION=$(date -u -d @${DURATION_SECONDS} +"%H:%M:%S")
             echo "payload=$PAYLOAD" >> $GITHUB_OUTPUT
-            echo "duration=$DURATION" >> $GITHUB_OUTPUT
+            echo "duration=$FORMATTED_DURATION" >> $GITHUB_OUTPUT
 
         - name: trigger slack notification
           uses: slackapi/slack-github-action@v2.1.0
@@ -43,4 +44,5 @@ jobs:
           env :
             SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }},
             SLACK_DURATION: ${{ steps.slack_payload.outputs.duration }}
+            SLACK_BUILD_NUMBER: ${{ github.run_number }}
             

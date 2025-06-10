@@ -31,7 +31,7 @@
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "*Build number:* ${{ github.run_number }} "
+          "text": "*Build number:* ${{ env.SLACK_BUILD_NUMBER }} "
         },
         "accessory": {
           "type": "button",
@@ -52,7 +52,7 @@
         "elements": [
           {
             "type": "mrkdwn",
-            "text": "Run by ${{ github.actor }}"
+            "text": ":bust_in_silhouette:  Run by ${{ github.actor }}"
           }
         ]
       }
