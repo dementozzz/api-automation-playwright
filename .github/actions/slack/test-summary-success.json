@@ -1,0 +1,60 @@
+{
+	"channel": "${{ env.SLACK_CHANNEL_ID }}",
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Test Result"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": ":white_check_mark:  All tests PASSED! "
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": ":clock3:  ${{ env.SLACK_DURATION }} "
+				}
+			]
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Build number:* ${{ github.run_number }} "
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "See results",
+					"emoji": true
+				},
+				"value": "btn_result",
+				"action_id": "button-action"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": "Run by ${{ github.actor }}"
+				}
+			]
+		}
+	]
+}
