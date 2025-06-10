@@ -32,16 +32,6 @@
 			"text": {
 				"type": "mrkdwn",
 				"text": "*Build number:* ${{ env.SLACK_BUILD_NUMBER }} "
-			},
-			"accessory": {
-				"type": "button",
-				"text": {
-					"type": "plain_text",
-					"text": "See results",
-					"emoji": true
-				},
-				"value": "btn_result",
-				"action_id": "button-action"
 			}
 		},
 		{
@@ -53,6 +43,20 @@
 				{
 					"type": "mrkdwn",
 					"text": ":bust_in_silhouette:  Run by ${{ github.actor }}"
+				}
+			]
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "See Results"
+					},
+					"value": "button_click",
+					"url": "${{ env.GITHUB_URL_BUILD }}"
 				}
 			]
 		}
