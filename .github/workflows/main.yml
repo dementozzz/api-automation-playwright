@@ -54,7 +54,13 @@ jobs:
         sed -i "s|\$DB_PASSWORD|${{ secrets.DB_PASSWORD }}|g" .env  
 
     - name: Run Playwright tests
-      run: npx playwright test --project=${{ github.event.inputs.test_type }}
+      run: |
+        start=$(date +%s)
+        npx playwright test --project=${{ github.event.inputs.test_type }}
+        end=$(date +%s)
+        DURATION=$(echo "$end - $start" | bc)
+        FORMATTED_DURATION=$(date -u -d @${DURATION} +"%H:%M:%S")
+        echo "duration=$FORMATTED_DURATION" >> $GITHUB_OUTPUT
 
     - name: Upload HTML test report
       uses: actions/upload-artifact@v4
@@ -62,4 +68,27 @@ jobs:
       with:
         name: playwright-report
         path: playwright-report/
-        retention-days: 7
+        retention-days: 30
+
+    - name: Determine payload slack notification
+      id: slack_payload
+      run: |        
+        if [ "${{ job.status }}" == "success" ]; then
+          PAYLOAD='.github/actions/slack/test-summary-success.json'
+        else
+          PAYLOAD='.github/actions/slack/test-summary-failed.json'
+        fi
+        echo "payload=$PAYLOAD" >> $GITHUB_OUTPUT
+
+    - name: trigger slack notification
+      uses: slackapi/slack-github-action@v2.1.0
+      with:
+        payload-file-path: ${{ steps.slack_payload.outputs.payload }}
+        payload-templated: true
+        webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+        webhook-type: incoming-webhook
+      env :
+        SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }},
+        SLACK_DURATION: ${{ steps.slack_payload.outputs.duration }}
+        SLACK_BUILD_NUMBER: ${{ github.run_number }}
+        GITHUB_URL_BUILD: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
