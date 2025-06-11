@@ -54,6 +54,7 @@ jobs:
         sed -i "s|\$DB_PASSWORD|${{ secrets.DB_PASSWORD }}|g" .env  
 
     - name: Run Playwright tests
+      id : playwright_test
       run: |
         start=$(date +%s)
         npx playwright test --project=${{ github.event.inputs.test_type }}
@@ -89,6 +90,9 @@ jobs:
         webhook-type: incoming-webhook
       env :
         SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }},
-        SLACK_DURATION: ${{ steps.slack_payload.outputs.duration }}
+        SLACK_DURATION: ${{ steps.playwright_test.outputs.duration }}
         SLACK_BUILD_NUMBER: ${{ github.run_number }}
         GITHUB_URL_BUILD: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
+        GITHUB_BRANCH: ${{ github.ref_name }}
+        GITHUB_TEST_TYPE: ${{ github.event.inputs.test_type }}
+        
