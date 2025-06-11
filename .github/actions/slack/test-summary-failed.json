@@ -1,65 +1,57 @@
 {
-    "channel": "${{ env.SLACK_CHANNEL_ID }}",
-    "blocks": [
-      
-        {
-          "type": "header",
-          "text": {
-            "type": "plain_text",
-            "text": "Test Result"
-          }
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": ":x:  Some of your test FAILED "
-          }
-        },
-        {
-          "type": "context",
-          "elements": [
-            {
-              "type": "mrkdwn",
-              "text": ":clock3:  ${{ env.SLACK_DURATION }} "
-            }
-          ]
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "*Build number:* ${{ env.SLACK_BUILD_NUMBER }} "
-          }
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "context",
-          "elements": [
-            {
-              "type": "mrkdwn",
-              "text": ":bust_in_silhouette:  Run by ${{ github.actor }}"
-            }
-          ]
-        },
-        {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "See Results"
-              },
-              "value": "button_click",
-              "url": "${{ env.GITHUB_URL_BUILD }}"
-            }
-          ]
-        }
-    ]
+	"channel": "${{ env.SLACK_CHANNEL_ID }}",
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Test Result"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": ":x:  Some of your test FAILED \n\n:clock3:  ${{env.SLACK_DURATION}}"
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": "*Test branch:* ${{ env.GITHUB_BRANCH }}\n*Test type:*  ${{env.GITHUB_TEST_TYPE}}\n*Build number:* #${{ env.SLACK_BUILD_NUMBER }}  "
+				}
+			]
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": ":bust_in_silhouette:  Run by ${{ github.actor }}"
+				}
+			]
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "See Results"
+					},
+					"value": "button_click",
+					"url": "${{ env.GITHUB_URL_BUILD }}"
+				}
+			]
+		}
+	]
 }

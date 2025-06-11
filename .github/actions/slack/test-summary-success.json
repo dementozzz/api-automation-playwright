@@ -15,7 +15,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": ":white_check_mark:  All tests PASSED! "
+				"text": ":white_check_mark:  All tests PASSED!\n\n:clock3:  ${{env.SLACK_DURATION}}"
 			}
 		},
 		{
@@ -23,16 +23,9 @@
 			"elements": [
 				{
 					"type": "mrkdwn",
-					"text": ":clock3:  ${{ env.SLACK_DURATION }} "
+					"text": "*Test branch:* ${{ env.GITHUB_BRANCH }}\n*Test type:*  ${{env.GITHUB_TEST_TYPE}}\n*Build number:* #${{ env.SLACK_BUILD_NUMBER }}  "
 				}
 			]
-		},
-		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "*Build number:* ${{ env.SLACK_BUILD_NUMBER }} "
-			}
 		},
 		{
 			"type": "divider"
