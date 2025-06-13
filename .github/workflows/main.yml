@@ -71,6 +71,12 @@ jobs:
         path: playwright-report/
         retention-days: 30
 
+    - name: Publish Test Report to github action run
+      uses: ctrf-io/github-test-reporter@v1
+      with:
+        report-path: './data/report/files/ctrf-report.json'
+      if: always()
+
     - name: Determine payload slack notification
       id: slack_payload
       run: |        

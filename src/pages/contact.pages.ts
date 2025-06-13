@@ -17,6 +17,7 @@ export class contactPages{
         postalCode?: string
     }){
 
+        //Generate data for create contact list
         const body = await CreateContact({
             firstname : obj.firstname,
             lastname : obj.lastname,
@@ -28,6 +29,7 @@ export class contactPages{
 
         await this.page.locator("//button[@id='add-contact']").click();
 
+        //fill all required data gathered from previous step
         await this.page.locator("//input[@id='firstName']").fill(body.firstName);
         await this.page.locator("//input[@id='lastName']").fill(body.lastName);
         await this.page.locator("//input[@id='birthdate']").fill(body.birthdate);
@@ -128,9 +130,10 @@ export class contactPages{
     }
 
     async getUserData(){
-        
+        //wait until user information is shown
         await this.page.locator("//span[@id='firstName']").waitFor({state: 'visible'});
 
+        //retrieve the data to be returned
         const firstname = await this.page.locator("//span[@id='firstName']").textContent();
         const lastname = await this.page.locator("//span[@id='lastName']").textContent();
         const birthdate = await this.page.locator("//span[@id='birthdate']").textContent();
@@ -163,24 +166,30 @@ export class contactPages{
             await dialog.accept();
         });
         
-        await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
-        const count = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
-        console.log("CURRENT DATA COUNT: " + count);
+        //while in /contactList page, try retrieve data directly from network response instead of waiting UI to finish load
+        const response = await this.page.waitForResponse('https://thinking-tester-contact-list.herokuapp.com/contacts');
+        const data = await response.json();
+        const count = Array.isArray(data) ? data.length : 0;
 
+        //if there's data
         if(count > 0){
+            //wait the UI to load the data
+            await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
             await this.page.locator("//tr[@class='contactTableBodyRow']").first().click();
+
+            //wait until user information is shown then click "Delete" button
+            await this.page.locator("//span[@id='firstName']").waitFor({state: 'visible'});
             await this.page.locator("//button[@id='delete']").click();
 
-            await this.page.waitForURL("https://thinking-tester-contact-list.herokuapp.com/contactList");
-
+            //wait until all user list is shown then count it
             await this.page.locator("//tr[@class='contactTableBodyRow']").first().waitFor();
             const finalDataCount = await this.page.locator("//tr[@class='contactTableBodyRow']").count();
 
-            console.log("UPDATED DATA COUNT: " + finalDataCount);
+            //make sure the data count must be less than before 
             expect(finalDataCount).toBeLessThan(count);
             
         }else{
-            return;
+            expect(count).toEqual(0);
         }
     }
 }

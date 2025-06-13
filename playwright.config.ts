@@ -26,7 +26,8 @@ export default defineConfig({
     ['html'],
     ['playwright-ctrf-json-reporter', {
       outputDir: './data/report/files'
-    }]
+    }],
+    ['./src/report/my-report.ts']
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
