@@ -19,8 +19,8 @@ test.describe('Add contact list', async () => {
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
         const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).not.toBeNull();
-        console.log("ERROR TEXT = " + errorElement)
+        expect(errorElement).toContain('Contact validation failed: firstName: Path `firstName` is required.');
+        
     })
 
     test('Without last name', async ({page}) => {
@@ -35,8 +35,8 @@ test.describe('Add contact list', async () => {
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
         const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).not.toBeNull();
-        console.log("ERROR TEXT = " + errorElement)
+        expect(errorElement).toContain('Contact validation failed: lastName: Path `lastName` is required.');
+        
     })
 
     test('With invalid format of birthdate', async ({page}) => {
@@ -51,8 +51,8 @@ test.describe('Add contact list', async () => {
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
         const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toEqual('Contact validation failed: birthdate: Birthdate is invalid');
-        console.log("ERROR TEXT = " + errorElement)
+        expect(errorElement).toContain('Contact validation failed: birthdate: Birthdate is invalid');
+        
     })
 
     test('With invalid format of phone number', async ({page}) => {
@@ -67,8 +67,8 @@ test.describe('Add contact list', async () => {
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
         const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).not.toBeNull();
-        console.log("ERROR TEXT = " + errorElement)
+        expect(errorElement).toContain('Contact validation failed: phone: Phone number is invalid');
+        
     })
 
     test('With invalid format of email', async ({page}) => {
@@ -83,8 +83,8 @@ test.describe('Add contact list', async () => {
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
         const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).not.toBeNull();
-        console.log("ERROR TEXT = " + errorElement)
+        expect(errorElement).toContain('Contact validation failed: email: Email is invalid');
+        
     })
 
     test('with valid input value', async ({page}) => {
