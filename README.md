@@ -69,7 +69,7 @@ npx playwright test --project=api --headed
 
 #### Web Testing:
 
-```
+```bash
 npx playwright test --project=web --headed
 ```
 
