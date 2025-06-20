@@ -49,7 +49,7 @@ To smoothen the automation process, an account is required. You can use the cred
  
 ## How to run test
 
-### API Test
+
 
 ### Before you run test
 
@@ -59,12 +59,15 @@ Make sure you create .env file in your project folder that contain your credenti
 EMAIL=<your-email>
 PASSWORD=<your-password>
 ```
+### Execute test
+
+#### API Test:
 
 ```bash
 npx playwright test --project=api --headed
 ```
 
-### Web Testing
+#### Web Testing:
 
 ```
 npx playwright test --project=web --headed
