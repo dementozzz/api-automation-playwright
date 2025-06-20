@@ -24,7 +24,8 @@ export async function CreateContact(
         birthday?: string, 
         phone?: string, 
         email?: string, 
-        postalCode?: string
+        postalCode?: string,
+        password? : string
     }){
 
     let firstName = 
@@ -50,6 +51,10 @@ export async function CreateContact(
     let postalCode = 
         typeof obj.postalCode != "undefined" ? obj.postalCode
         : faker.location.zipCode();
+    
+    let password =
+        typeof obj.password != "undefined" ? obj.password
+        : faker.internet.password();
 
     return{
         firstName : firstName,
@@ -62,6 +67,7 @@ export async function CreateContact(
         city : faker.location.city(),
         stateProvince : faker.location.state(),
         postalCode : postalCode,
-        country : faker.location.country()
+        country : faker.location.country(),
+        password : password
     }
 }

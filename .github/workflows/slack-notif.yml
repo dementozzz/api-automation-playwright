@@ -46,3 +46,5 @@ jobs:
             SLACK_DURATION: ${{ steps.slack_payload.outputs.duration }}
             SLACK_BUILD_NUMBER: ${{ github.run_number }}
             GITHUB_URL_BUILD: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
+            GITHUB_BRANCH: ${{ github.ref_name }}
+            GITHUB_TEST_TYPE: "Test Notification"
