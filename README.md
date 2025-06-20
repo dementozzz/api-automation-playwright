@@ -1,12 +1,12 @@
 # Playwright API & WEB Automation testing project
 
-This repository contains API & WEB automation tests built with `Playwright` and `TypeScript` using [Contact list app website](https://thinking-tester-contact-list.herokuapp.com/). <br />
+This repository contains API & WEB automation tests built with `Playwright` and `TypeScript` using [Contact list app website](https://thinking-tester-contact-list.herokuapp.com/).
 The tests are executed via GitHub Actions.
 
 ## Overview
 
 A comprehensive testing framework that
-- Combines API & E2E in one solution
+- Combines API & E2E testing in one solution
 - Integrated with CI/CD pipelines and automated reporting systems.
 
 ## :pushpin: Table of Contents
