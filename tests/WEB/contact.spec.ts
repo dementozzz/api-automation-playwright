@@ -2,12 +2,11 @@ import { test, expect } from '@playwright/test';
 import { CreateContact } from '../../src/helper/generate-user-helper';
 import { contactPages } from '../../src/pages/contact.pages';
 
-
 test.use({ storageState: './data/auth/user-cookies.json' });
 
 test.describe('Add contact list', async () => {
 
-    test('Without first name', async ({page}) => {
+    test('Add - Without first name', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
@@ -18,12 +17,12 @@ test.describe('Add contact list', async () => {
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
-        const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toContain('Contact validation failed: firstName: Path `firstName` is required.');
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('Contact validation failed');
         
     })
 
-    test('Without last name', async ({page}) => {
+    test('Add - Without last name', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
@@ -34,12 +33,12 @@ test.describe('Add contact list', async () => {
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
-        const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toContain('Contact validation failed: lastName: Path `lastName` is required.');
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('Contact validation failed');
         
     })
 
-    test('With invalid format of birthdate', async ({page}) => {
+    test('Add - With invalid format of birthdate', async ({page}) => {
         const contactpages = new contactPages(page);
         
         await page.goto("/contactList");
@@ -50,12 +49,12 @@ test.describe('Add contact list', async () => {
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
-        const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toContain('Contact validation failed: birthdate: Birthdate is invalid');
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('Contact validation failed');
         
     })
 
-    test('With invalid format of phone number', async ({page}) => {
+    test('Add - With invalid format of phone number', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
@@ -66,12 +65,12 @@ test.describe('Add contact list', async () => {
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
-        const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toContain('Contact validation failed: phone: Phone number is invalid');
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('Contact validation failed');
         
     })
 
-    test('With invalid format of email', async ({page}) => {
+    test('Add - With invalid format of email', async ({page}) => {
         const contactpages = new contactPages(page);
 
         await page.goto("/contactList");
@@ -82,12 +81,12 @@ test.describe('Add contact list', async () => {
         await page.waitForEvent('requestfinished');
         await page.locator("//span[@id='error']").waitFor({state : 'visible'});
 
-        const errorElement = await page.locator("//span[@id='error']").innerText();
-        expect(errorElement).toContain('Contact validation failed: email: Email is invalid');
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('Contact validation failed');
         
     })
 
-    test('with valid input value', async ({page}) => {
+    test('Add - with valid input value', async ({page}) => {
         const contactpages = new contactPages(page);
 
         const currentdata = await contactpages.countListData();

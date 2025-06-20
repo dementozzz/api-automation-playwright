@@ -6,9 +6,71 @@ const email = process.env.EMAIL as string
 const password = process.env.PASSWORD as string
 
 
-test.describe('login', async () => {
+test.describe('Register', async() => {
+    test('Register - with empty first name', async ({page}) => {
+        const authpages = new authPages(page);
+        await page.goto('/')
 
-    test('with invalid credential', async({page}) => {
+        await authpages.register({
+            firstname : ""
+        });
+
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('User validation failed')
+    })
+
+    test('Register - with empty last name', async ({page}) => {
+        const authpages = new authPages(page);
+        await page.goto('/')
+
+        await authpages.register({
+            lastname : ""
+        });
+
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('User validation failed')
+    })
+
+    test('Register - with empty email', async ({page}) => {
+        const authpages = new authPages(page);
+        await page.goto('/')
+
+        await authpages.register({
+            email : ""
+        });
+
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('User validation failed')
+    })
+
+    test('Register - with invalid format email', async ({page}) => {
+        const authpages = new authPages(page);
+        await page.goto('/')
+
+        await authpages.register({
+            email : "asdasd"
+        });
+
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('User validation failed')
+    })
+
+    test('Register - with empty password', async ({page}) => {
+        const authpages = new authPages(page);
+        await page.goto('/')
+
+        await authpages.register({
+            password : ""
+        });
+
+        const errorElement = page.locator("//span[@id='error']");
+        await expect(errorElement).toContainText('User validation failed')
+    })
+})
+
+test.describe('Login', async () => {
+
+    test('Login - with invalid credential', async({page}) => {
         const authpages = new authPages(page);
 
         await page.goto('/')
@@ -21,7 +83,7 @@ test.describe('login', async () => {
         await expect(errorElement).toContainText("Incorrect username or password");
     })
 
-    test('with valid credential', async ({page}) => {
+    test('Login - with valid credential', async ({page}) => {
         const authpages = new authPages(page);
 
         await page.goto('/')
